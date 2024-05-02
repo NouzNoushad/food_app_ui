@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pizza_ui/data/constants.dart';
+import 'package:pizza_ui/screens/details_screen.dart';
 
 class PizzaHomeScreen extends StatefulWidget {
   const PizzaHomeScreen({super.key});
@@ -93,76 +94,82 @@ class _PizzaHomeScreenState extends State<PizzaHomeScreen>
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         final pizza = popularPizzas[index];
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.2,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => DetailsScreen(pizza: pizza)));
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
             ),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  color: Colors.transparent,
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        pizza.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        '${pizza.title} Pizza',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.local_fire_department,
-                            color: Colors.amber,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          pizza.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
-                          Text(
-                            '${pizza.calories} Calories',
-                            style: const TextStyle(
-                              fontSize: 13,
+                        ),
+                        Text(
+                          '${pizza.title} Pizza',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.local_fire_department,
                               color: Colors.amber,
-                              fontWeight: FontWeight.w500,
                             ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '\$${pizza.price}',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
+                            Text(
+                              '${pizza.calories} Calories',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.amber,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                )),
-                Image.asset(
-                  'assets/${pizza.image}',
-                  height: MediaQuery.of(context).size.height,
-                )
-              ],
+                        Text(
+                          '\$${pizza.price}',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+                  Image.asset(
+                    'assets/${pizza.image}',
+                    height: MediaQuery.of(context).size.height,
+                  )
+                ],
+              ),
             ),
           ),
         );
