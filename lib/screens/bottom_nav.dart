@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pizza_ui/screens/cart_screen.dart';
 import 'package:pizza_ui/screens/home_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -63,7 +64,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const CartScreen()));
+        },
         backgroundColor: const Color.fromRGBO(255, 210, 88, 1),
         child: const Icon(
           Icons.shopping_bag,

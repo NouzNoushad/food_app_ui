@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pizza_ui/data/database.dart';
 import 'package:pizza_ui/model/popular_pizza.dart';
+import 'package:pizza_ui/screens/cart_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key, required this.pizza});
@@ -13,6 +15,14 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int count = 1;
+  MyDatabase myDatabase = MyDatabase();
+
+  @override
+  void initState() {
+    myDatabase.open();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +56,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
           height: MediaQuery.of(context).size.height * 0.06,
           width: MediaQuery.of(context).size.width * 0.9,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              await myDatabase.db!.rawInsert(
+                  'INSERT INTO foodCarts(image, title, price, count) VALUES (?, ?, ?, ?)',
+                  [
+                    widget.pizza.image,
+                    widget.pizza.title,
+                    (widget.pizza.price * count).toStringAsFixed(2),
+                    count
+                  ]).then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.white,
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(
+                      'Product added to cart',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        letterSpacing: 1,
+                      ),
+                    )));
+              });
+            },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromRGBO(46, 120, 85, 1),
                 shape: RoundedRectangleBorder(
@@ -334,15 +365,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
             ),
-            PhysicalModel(
-              elevation: 1.2,
-              color: Colors.grey.shade300,
-              shape: BoxShape.circle,
-              child: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.shopping_bag,
-                  color: Color.fromRGBO(46, 120, 85, 1),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const CartScreen()));
+              },
+              child: PhysicalModel(
+                elevation: 1.2,
+                color: Colors.grey.shade300,
+                shape: BoxShape.circle,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.shopping_bag,
+                    color: Color.fromRGBO(46, 120, 85, 1),
+                  ),
                 ),
               ),
             ),
